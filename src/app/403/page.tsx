@@ -31,8 +31,7 @@ export default function ForbiddenPage() {
             </span>
           </div>
         </div>
-
-        {/* Action Buttons */}
+        
         <div className="space-y-3">
           <Button 
             variant="default" 
