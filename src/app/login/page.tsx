@@ -11,7 +11,6 @@ export default function Login() {
       <h1 className="text-2xl font-bold mb-6 text-center">เข้าสู่ระบบ</h1>
 
       <form onSubmit={handleSubmit(onSubmitLogin)}>
-        {/* Username Field */}
         <div className="mb-4">
           <label
             htmlFor="username"
@@ -34,7 +33,6 @@ export default function Login() {
           )}
         </div>
 
-        {/* Password Field */}
         <div className="mb-4">
           <label
             htmlFor="password"
@@ -57,10 +55,8 @@ export default function Login() {
           )}
         </div>
 
-        {/* Error Message */}
         {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
 
-        {/* Submit Button */}
         <div>
           <button
             type="submit"

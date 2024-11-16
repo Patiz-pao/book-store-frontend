@@ -28,9 +28,13 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-        >
-        <Navbar/>
-        {children}
+      >
+        <div className="grid grid-rows-[auto_1fr] h-screen">
+          <Navbar />
+          <main className="h-full bg-gradient-to-b from-gray-50 to-gray-100">
+            {children}
+          </main>
+        </div>
       </body>
     </html>
   );
