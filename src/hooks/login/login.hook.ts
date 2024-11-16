@@ -38,13 +38,11 @@ export const useLogin = () => {
 
       if (response.ok) {
         const data = await response.json();
-        const { token, role } = data.data;
-
-        console.log("token", token);
-        console.log("role", role);
+        const { token, role, username } = data.data;
 
         Cookies.set("token", token, { expires: 1 / 24 });
         Cookies.set("role", role, { expires: 1 / 24 });
+        Cookies.set("username", username, { expires: 1 / 24 });
 
         // Cookies.set("token", token, { expires: 10 / (24 * 60 * 60) }); // 10 วินาที
         // Cookies.set("role", role, { expires: 10 / (24 * 60 * 60) }); // 10 วินาที
