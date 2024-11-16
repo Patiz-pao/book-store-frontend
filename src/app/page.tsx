@@ -1,10 +1,11 @@
 import React from "react";
-import BooksStore from "./bookstore/page";
 
 export default function Home() {
   return (
-    <div>
-      <BooksStore />
+    <div className="container mx-auto">
+      <div className="text-center text-xl mt-10">
+      WelCome To Book Store
+      </div>
     </div>
   );
 }

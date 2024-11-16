@@ -4,6 +4,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Cookies from "js-cookie";
 
 export const useLogin = () => {
   const [loading, setLoading] = useState(false);
@@ -37,6 +38,17 @@ export const useLogin = () => {
 
       if (response.ok) {
         const data = await response.json();
+        const { token, role } = data.data;
+
+        console.log("token", token);
+        console.log("role", role);
+
+        Cookies.set("token", token, { expires: 1 / 24 });
+        Cookies.set("role", role, { expires: 1 / 24 });
+
+        // Cookies.set("token", token, { expires: 10 / (24 * 60 * 60) }); // 10 วินาที
+        // Cookies.set("role", role, { expires: 10 / (24 * 60 * 60) }); // 10 วินาที
+
         if (data.data.role === "admin") {
           router.push("/admin/home");
         } else {

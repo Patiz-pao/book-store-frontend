@@ -1,7 +1,10 @@
 import React from 'react'
+import BooksStore from "@/app/bookstore/page";
 
 export default function Home() {
   return (
-    <div>Admin</div>
+    <div>
+      <BooksStore />
+    </div>
   )
 }
