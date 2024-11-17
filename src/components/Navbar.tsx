@@ -12,7 +12,8 @@ import {
 import { useNavbar } from "@/hooks/navbar/navbar.hook";
 
 const Navbar = () => {
-  const { username, isLoading, pathname, checkAuth, handleLogout } = useNavbar();
+  const { username, role, isLoading, pathname, checkAuth, handleLogout } =
+    useNavbar();
 
   useEffect(() => {
     checkAuth();
@@ -61,6 +62,16 @@ const Navbar = () => {
     );
   };
 
+  const menuItems = [
+    { label: "หนังสือ", href: "/" },
+    { label: "E-book", href: "/" },
+    { label: "สินค้าไลฟ์สไตล์", href: "/" },
+  ];
+  
+  if (role === "admin") {
+    menuItems.push({ label: "จัดการ", href: "/admin/home" });
+  }
+
   return (
     <nav className="w-full shadow-md">
       <div className="bg-green-600 text-white">
@@ -77,38 +88,16 @@ const Navbar = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center h-12">
             <ul className="flex space-x-8">
-              <li>
-                <Link
-                  href="/"
-                  className="hover:text-green-400 transition-colors"
-                >
-                  หนังสือ
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/"
-                  className="hover:text-green-400 transition-colors"
-                >
-                  E-book
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/"
-                  className="hover:text-green-400 transition-colors"
-                >
-                  สินค้าไลฟ์สไตล์
-                </Link>
-              </li>
-              <li>
-                <Link
-                  href="/"
-                  className="hover:text-green-400 transition-colors"
-                >
-                  ติดต่อเรา
-                </Link>
-              </li>
+              {menuItems.map((item) => (
+                <li key={item.label}>
+                  <Link
+                    href={item.href}
+                    className="hover:text-green-400 transition-colors"
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>

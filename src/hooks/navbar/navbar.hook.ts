@@ -40,5 +40,5 @@ export const useNavbar = () => {
     router.push("/login");
   };
 
-  return { username, isLoading, pathname, checkAuth, handleLogout }
+  return { username, role, isLoading, pathname, checkAuth, handleLogout }
 };

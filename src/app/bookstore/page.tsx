@@ -4,7 +4,12 @@ import { useBookstore } from "@/hooks/bookstore/bookstore.hook";
 export default function BooksStore() {
   const { books, loading, error } = useBookstore();
 
-  if (loading) return <div>Loading...</div>;
+  if (loading)
+    return (
+      <div className="items-center justify-center h-screen flex">
+        <div className="w-10 h-10 border-4 border-gray-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
   if (error) return <div>{error}</div>;
 
   return (
