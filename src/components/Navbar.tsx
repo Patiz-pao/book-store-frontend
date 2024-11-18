@@ -63,8 +63,8 @@ const Navbar = () => {
   };
 
   const menuItems = [
-    { label: "หนังสือ", href: "/" },
-    { label: "E-book", href: "/" },
+    { label: "หน้าแรก", href: "/" },
+    { label: "สินค้า", href: "/products" },
     { label: "สินค้าไลฟ์สไตล์", href: "/" },
   ];
   
