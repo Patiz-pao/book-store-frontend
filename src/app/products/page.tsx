@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-
+import { useProducts } from "@/hooks/products/products.hook";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,7 +13,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -26,14 +25,24 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
+import { RadioGroup } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
-
-import { useProducts } from "@/hooks/products/products.hook";
+import { SearchParams } from "@/Types/products/products.types";
 
 export default function Products() {
+  const { books, loading, error, searchBooks } = useProducts();
+  const [searchParams, setSearchParams] = useState<SearchParams>({
+    title: "",
+    description: "",
+    price: undefined,
+    category: "",
+    types: "",
+  });
 
-  const { setSearchParams, handleSearch, searchParams } = useProducts()
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    searchBooks(searchParams);
+  };
 
   return (
     <div className="container mx-auto py-4 px-4">
@@ -49,37 +58,39 @@ export default function Products() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="flex gap-4 py-4">
-        <div>
-          <Card className="w-[300px]">
+      <div className="flex flex-col md:flex-row gap-4 py-4">
+        {/* Search Form Card */}
+        <div className="w-full md:w-[300px]">
+          <Card>
             <CardHeader>
               <CardTitle>ตั้งค่าการค้นหา</CardTitle>
             </CardHeader>
             <CardContent>
-              <form onSubmit={(e) => {
-                e.preventDefault();
-                handleSearch();
-              }}>
+              <form onSubmit={handleSearch}>
                 <div className="grid w-full items-center gap-4">
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="name">ค้นหาตามชื่อหนังสือ</Label>
-                    <Input 
-                      id="name" 
-                      placeholder="ชื่อหนังสือ" 
-                      value={searchParams.bookName}
-                      onChange={(e) => setSearchParams({
-                        ...searchParams,
-                        bookName: e.target.value
-                      })}
+                    <Input
+                      id="name"
+                      placeholder="ชื่อหนังสือ"
+                      value={searchParams.title}
+                      onChange={(e) =>
+                        setSearchParams({
+                          ...searchParams,
+                          title: e.target.value,
+                        })
+                      }
                     />
                   </div>
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="category">หมวดหมู่สินค้า</Label>
-                    <Select 
-                      onValueChange={(value) => setSearchParams({
-                        ...searchParams,
-                        category: value
-                      })}
+                    <Select
+                      onValueChange={(value) =>
+                        setSearchParams({
+                          ...searchParams,
+                          category: value,
+                        })
+                      }
                     >
                       <SelectTrigger id="books">
                         <SelectValue placeholder="เลือกหมวดหมู่" />
@@ -88,65 +99,106 @@ export default function Products() {
                         <SelectItem value="kids">หนังสือเด็ก</SelectItem>
                         <SelectItem value="cartoons">การ์ตูนมังงะ</SelectItem>
                         <SelectItem value="education">การศึกษา</SelectItem>
-                        <SelectItem value="technology">วิทยาการและเทคโนโลยี</SelectItem>
+                        <SelectItem value="technology">
+                          วิทยาการและเทคโนโลยี
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="flex flex-col space-y-3">
                     <Label>ประเภทหนังสือ</Label>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox 
-                        id="physical"
-                        checked={searchParams.types.physical}
-                        onCheckedChange={(checked) => setSearchParams({
-                          ...searchParams,
-                          types: {
-                            ...searchParams.types,
-                            physical: checked === true
+                    <div className="flex flex-col space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          id="physical"
+                          name="bookType"
+                          value="physical"
+                          checked={searchParams.types === "physical"}
+                          onChange={() =>
+                            setSearchParams({
+                              ...searchParams,
+                              types: "physical",
+                            })
                           }
-                        })}
-                      />
-                      <label
-                        htmlFor="physical"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        หนังสือเล่ม
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Checkbox 
-                        id="ebook"
-                        checked={searchParams.types.ebook}
-                        onCheckedChange={(checked) => setSearchParams({
-                          ...searchParams,
-                          types: {
-                            ...searchParams.types,
-                            ebook: checked === true
+                        />
+                        <label htmlFor="physical" className="text-sm">
+                          หนังสือเล่ม
+                        </label>
+                      </div>
+
+                      <div className="flex items-center space-x-2">
+                        <input
+                          type="radio"
+                          id="ebook"
+                          name="bookType"
+                          value="ebook"
+                          checked={searchParams.types === "ebook"}
+                          onChange={() =>
+                            setSearchParams({
+                              ...searchParams,
+                              types: "ebook",
+                            })
                           }
-                        })}
-                      />
-                      <label
-                        htmlFor="ebook"
-                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                      >
-                        E-book
-                      </label>
+                        />
+                        <label htmlFor="ebook" className="text-sm">
+                          หนังสืออิเล็กทรอนิกส์
+                        </label>
+                      </div>
                     </div>
                   </div>
-                  <Button 
-                    type="submit" 
+
+                  <Button
+                    type="submit"
                     className="w-full mt-4"
+                    disabled={loading}
                   >
-                    ค้นหา
+                    {loading ? "กำลังค้นหา..." : "ค้นหา"}
                   </Button>
                 </div>
               </form>
             </CardContent>
-            <CardFooter className="flex justify-between"></CardFooter>
           </Card>
         </div>
 
-        <div>1234</div>
+        {/* Results Section */}
+        <div className="flex-1">
+          {error && (
+            <div className="text-red-500 mb-4 p-4 bg-red-50 rounded-md">
+              <p>{error}</p>
+            </div>
+          )}
+
+          {loading ? (
+            <div className="flex items-center justify-center h-32">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {books.length === 0 ? (
+                <div className="col-span-full text-center py-8 text-gray-500">
+                  ไม่พบหนังสือที่ค้นหา
+                </div>
+              ) : (
+                books.map((book, index) => (
+                  <Card key={index}>
+                    <CardHeader>
+                      <CardTitle className="text-lg">{book.title}</CardTitle>
+                      <CardDescription>
+                        {book.type === "physical" ? "หนังสือเล่ม" : "E-book"}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-500">
+                        หมวดหมู่: {book.category}
+                      </p>
+                    </CardContent>
+                  </Card>
+                ))
+              )}
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
