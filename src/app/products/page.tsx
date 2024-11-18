@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { useProducts } from "@/hooks/products/products.hook";
 import {
   Breadcrumb,
@@ -25,24 +24,11 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup } from "@/components/ui/radio-group";
 import { Button } from "@/components/ui/button";
-import { SearchParams } from "@/Types/products/products.types";
+import Link from "next/link";
 
 export default function Products() {
-  const { books, loading, error, searchBooks } = useProducts();
-  const [searchParams, setSearchParams] = useState<SearchParams>({
-    title: "",
-    description: "",
-    price: undefined,
-    category: "",
-    types: "",
-  });
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    searchBooks(searchParams);
-  };
+  const { books, loading, error, searchParams, setSearchParams, handleSearch } = useProducts();
 
   return (
     <div className="container mx-auto py-4 px-4">
@@ -102,6 +88,7 @@ export default function Products() {
                         <SelectItem value="technology">
                           วิทยาการและเทคโนโลยี
                         </SelectItem>
+                        <SelectItem value="literary">วรรณกรรม</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -183,15 +170,34 @@ export default function Products() {
                 books.map((book, index) => (
                   <Card key={index}>
                     <CardHeader>
-                      <CardTitle className="text-lg">{book.title}</CardTitle>
-                      <CardDescription>
-                        {book.type === "physical" ? "หนังสือเล่ม" : "E-book"}
+                      <CardTitle className="text-lg mx-auto">{book.title}</CardTitle>
+                      <CardContent className="p-0">
+                        <img src={book.imageUrl} className="w-[50%] mx-auto" />
+                      </CardContent>
+                      <CardDescription className="py-2">
+                        {book.description}
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-sm text-gray-500">
-                        หมวดหมู่: {book.category}
-                      </p>
+                      <div className="flex gap-2 items-center">
+                        <CardDescription className="text-sm text-black">
+                          ประเภทหนังสือ:
+                        </CardDescription>
+                        <CardDescription>
+                          {book.type === "physical" ? "หนังสือเล่ม" : "E-book"}
+                        </CardDescription>
+                      </div>
+                      <div className="flex gap-2 items-center">
+                        <CardDescription className="text-sm text-black">
+                          หมวดหมู่:
+                        </CardDescription>
+                        <CardDescription>
+                          {book.category}
+                        </CardDescription>
+                      </div>
+                    <Button className="bg-green-600 mt-2">
+                      <Link href="/">ดูเพิ่มเติม</Link>
+                    </Button>
                     </CardContent>
                   </Card>
                 ))

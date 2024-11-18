@@ -6,4 +6,5 @@ export interface Book {
   stock: number;
   category: string;
   type: string;
+  imageUrl: string;
 }

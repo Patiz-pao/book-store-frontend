@@ -8,6 +8,15 @@ export const useProducts = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
+  const [searchParams, setSearchParams] = useState<SearchParams>({
+    title: "",
+    description: "",
+    price: undefined,
+    category: "",
+    types: "",
+    imageUrl: "",
+  });
+
   useEffect(() => {
     getBooks();
   }, []);
@@ -32,6 +41,10 @@ export const useProducts = () => {
     }
   };
 
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    searchBooks(searchParams);
+  };
 
   const searchBooks = async (params: SearchParams) => {
     setLoading(true);
@@ -61,7 +74,7 @@ export const useProducts = () => {
         const data = await response.json();
         setBooks(data.data);
       } else {
-        setError("Failed to search books");
+        setError("ไม่พบหนังสือ - 404");
       }
     } catch (error) {
       setError("An error occurred while searching books");
@@ -75,7 +88,9 @@ export const useProducts = () => {
     books,
     loading,
     error,
-    searchBooks,
     getBooks,
+    searchParams,
+    setSearchParams,
+    handleSearch,
   };
 };

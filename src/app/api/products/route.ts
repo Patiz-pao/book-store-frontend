@@ -10,6 +10,7 @@ export async function GET(request: NextRequest) {
     const price = searchParams.get("price");
     const category = searchParams.get("category");
     const types = searchParams.get("types");
+    const imageurl = searchParams.get("imageUrl");
 
     const params = {
       title: title || null,
@@ -17,6 +18,7 @@ export async function GET(request: NextRequest) {
       price: price ? parseFloat(price) : null,
       category: category || null,
       types: types || null,
+      imageUrl: imageurl || null,
     };
 
     const response = await axiosInstance.get("/books/search", { params });

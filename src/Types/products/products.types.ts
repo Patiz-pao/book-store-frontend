@@ -4,4 +4,5 @@ export interface SearchParams {
   price: number | undefined;
   category: string;
   types: string;
+  imageUrl: string;
 }
