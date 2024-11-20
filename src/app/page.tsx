@@ -1,10 +1,8 @@
 import React from "react";
-import BooksStore from "./bookstore/page";
+import HomePage from "@/app/home/page"
 
 export default function Home() {
   return (
-    <div>
-      <BooksStore />
-    </div>
+    <HomePage />
   );
 }
