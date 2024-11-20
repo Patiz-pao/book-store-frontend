@@ -46,7 +46,6 @@ export default function Products() {
       </Breadcrumb>
 
       <div className="flex flex-col md:flex-row gap-4 py-4">
-        {/* Search Form Card */}
         <div className="w-full md:w-[300px]">
           <Card>
             <CardHeader>
@@ -130,7 +129,7 @@ export default function Products() {
                           }
                         />
                         <label htmlFor="ebook" className="text-sm">
-                          หนังสืออิเล็กทรอนิกส์
+                          E-book
                         </label>
                       </div>
                     </div>
@@ -149,7 +148,6 @@ export default function Products() {
           </Card>
         </div>
 
-        {/* Results Section */}
         <div className="flex-1">
           {error && (
             <div className="text-red-500 mb-4 p-4 bg-red-50 rounded-md">
@@ -169,45 +167,49 @@ export default function Products() {
                 </div>
               ) : (
                 books.map((book, index) => (
-                  <Card key={index}>
-                    <CardHeader>
-                      <CardTitle className="text-lg mx-auto">
-                        {book.title}
-                      </CardTitle>
-                      <CardContent className="p-0">
-                        <img
-                          src={book.imageUrl}
-                          className="w-auto max-h-[250px] mx-auto object-contain"
-                        />
+                  <Link
+                    href={`/products/information/${book.bookId}`}
+                    // href={`/products/information`}
+                    key={index}
+                    className="block transition-transform hover:scale-105"
+                  >
+                    <Card className="h-full cursor-pointer hover:shadow-lg">
+                      <CardHeader>
+                        <CardTitle className="text-lg mx-auto">
+                          {book.title}
+                        </CardTitle>
+                        <CardContent className="p-0">
+                          <img
+                            src={book.imageUrl}
+                            className="w-auto max-h-[200px] mx-auto object-contain"
+                          />
+                        </CardContent>
+                        <div className="h-[67px] overflow-hidden">
+                          <CardDescription className="py-2 text-ellipsis">
+                            {book.description}
+                          </CardDescription>
+                        </div>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="flex gap-2 items-center">
+                          <CardDescription className="text-sm text-black">
+                            ประเภทหนังสือ:
+                          </CardDescription>
+                          <CardDescription>
+                            {book.types === "physical"
+                              ? "หนังสือเล่ม"
+                              : "E-book"}
+                          </CardDescription>
+                        </div>
+                        <div className="flex gap-2 items-center">
+                          <CardDescription className="text-sm text-black">
+                            หมวดหมู่:
+                          </CardDescription>
+                          <CardDescription>{book.category}</CardDescription>
+                        </div>
                       </CardContent>
-                      <div className="h-[108px] overflow-hidden">
-                        <CardDescription className="py-2 text-ellipsis">
-                          {book.description}
-                        </CardDescription>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="flex gap-2 items-center">
-                        <CardDescription className="text-sm text-black">
-                          ประเภทหนังสือ:
-                        </CardDescription>
-                        <CardDescription>
-                          {book.type === "physical" ? "หนังสือเล่ม" : "E-book"}
-                        </CardDescription>
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <CardDescription className="text-sm text-black">
-                          หมวดหมู่:
-                        </CardDescription>
-                        <CardDescription>{book.category}</CardDescription>
-                      </div>
-                      <div className="flex justify-between">
-                        <Button className="bg-green-600 mt-2">
-                          <Link href="/">ดูเพิ่มเติม</Link>
-                        </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
+                    </Card>
+                  </Link>
                 ))
               )}
             </div>

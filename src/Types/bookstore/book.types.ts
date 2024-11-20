@@ -5,6 +5,11 @@ export interface Book {
   price: number;
   stock: number;
   category: string;
-  type: string;
+  types: string;
   imageUrl: string;
+  height_thickness: string;
+  pages: string;
+  language: string;
+  size: string;
+  date: string;
 }

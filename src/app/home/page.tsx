@@ -1,7 +1,6 @@
 "use client"
-import React, { useState } from "react";
+import React from "react";
 import { BookOpen, Search, ShoppingCart, TrendingUp } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useHome } from "@/hooks/home/home.hook"
 
 export default function Home() {
@@ -9,14 +8,12 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Hero Section */}
       <div className="bg-slate-300 text-black py-20 px-4">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-4xl md:text-6xl font-bold mb-4">
             ยินดีต้อนรับสู่ร้านหนังสือออนไลน์
           </h1>
           <p className="text-xl mb-8">ค้นพบหนังสือดีๆ ที่ใช่สำหรับคุณ</p>
-          {/* This call api */}
           <div className="flex max-w-xl mx-auto bg-white rounded-lg overflow-hidden">
             <form onSubmit={handleSearch} className="flex w-full">
               <input
@@ -37,7 +34,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Categories */}
       <div className="max-w-6xl mx-auto py-12 px-4">
         <h2 className="text-2xl font-bold mb-6">หมวดหมู่ยอดนิยม</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
@@ -51,8 +47,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-
-      {/* Featured Books */}
       <div className="max-w-6xl mx-auto py-12 px-4">
         <h2 className="text-2xl font-bold mb-6">หนังสือแนะนำ</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -80,8 +74,6 @@ export default function Home() {
           ))}
         </div>
       </div>
-
-      {/* Features */}
       <div className="bg-gray-100 py-12">
         <div className="max-w-6xl mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
