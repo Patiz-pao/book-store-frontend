@@ -1,12 +1,12 @@
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export const useHome = () => {
 
     const router = useRouter();
     const [title, setTitle] = useState("");
   
-    const handleSearch = (e: React.FormEvent) => {
+    const handleSearchTitle = (e: React.FormEvent) => {
       e.preventDefault();
       router.push(`/products?title=${encodeURIComponent(title)}`);
     };
@@ -36,14 +36,13 @@ export const useHome = () => {
       ];
     
       const categories = [
-        "นวนิยาย",
-        "การพัฒนาตนเอง",
+        "การศึกษา",
+        "หนังสือเด็ก",
+        "จิตวิทยา",
+        "พัฒนาตนเอง",
         "ธุรกิจ",
-        "วรรณกรรม",
-        "การ์ตูน",
-        "นิทาน",
+        "วรรณกรรม"
       ];
 
-
-    return {featuredBooks, categories, title, setTitle, handleSearch}
+    return {featuredBooks, categories, title, setTitle, handleSearchTitle}
 }

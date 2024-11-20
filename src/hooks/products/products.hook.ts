@@ -8,6 +8,8 @@ export const useProducts = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 15;
 
   const searchParams = useSearchParams();
   const [filters, setFilters] = useState<SearchParams>({
@@ -18,6 +20,17 @@ export const useProducts = () => {
     types: "",
     imageUrl: "",
   });
+
+  const paginatedBooks = books.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const totalPages = Math.ceil(books.length / itemsPerPage);
+
+  const goToNextPage = () =>
+    setCurrentPage((prev) => Math.min(prev + 1, totalPages));
+  const goToPrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   useEffect(() => {
     if (searchParams.get("title")) {
@@ -105,5 +118,10 @@ export const useProducts = () => {
     filters,
     setFilters,
     handleSearch,
+    paginatedBooks,
+    goToPrevPage,
+    goToNextPage,
+    currentPage,
+    totalPages,
   };
 };

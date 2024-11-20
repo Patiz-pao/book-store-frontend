@@ -4,7 +4,7 @@ import { BookOpen, Search, ShoppingCart, TrendingUp } from "lucide-react";
 import { useHome } from "@/hooks/home/home.hook"
 
 export default function Home() {
-  const { featuredBooks, categories, title, setTitle, handleSearch } = useHome();
+  const { featuredBooks, categories, title, setTitle, handleSearchTitle } = useHome();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -15,7 +15,7 @@ export default function Home() {
           </h1>
           <p className="text-xl mb-8">ค้นพบหนังสือดีๆ ที่ใช่สำหรับคุณ</p>
           <div className="flex max-w-xl mx-auto bg-white rounded-lg overflow-hidden">
-            <form onSubmit={handleSearch} className="flex w-full">
+            <form onSubmit={handleSearchTitle} className="flex w-full">
               <input
                 type="text"
                 placeholder="ค้นหาหนังสือที่คุณสนใจ..."

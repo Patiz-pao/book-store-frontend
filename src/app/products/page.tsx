@@ -26,10 +26,21 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function Products() {
-  const { books, loading, error, filters, setFilters, handleSearch } =
-    useProducts();
+  const {
+    loading,
+    error,
+    filters,
+    setFilters,
+    handleSearch,
+    paginatedBooks,
+    goToPrevPage,
+    goToNextPage,
+    currentPage,
+    totalPages,
+  } = useProducts();
 
   return (
     <div className="container mx-auto py-4 px-4">
@@ -68,6 +79,7 @@ export default function Products() {
                       }
                     />
                   </div>
+
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="category">หมวดหมู่สินค้า</Label>
                     <Select
@@ -82,16 +94,16 @@ export default function Products() {
                         <SelectValue placeholder="เลือกหมวดหมู่" />
                       </SelectTrigger>
                       <SelectContent position="popper">
-                        <SelectItem value="kids">หนังสือเด็ก</SelectItem>
-                        <SelectItem value="cartoons">การ์ตูนมังงะ</SelectItem>
                         <SelectItem value="education">การศึกษา</SelectItem>
-                        <SelectItem value="technology">
-                          วิทยาการและเทคโนโลยี
-                        </SelectItem>
+                        <SelectItem value="kids">หนังสือเด็ก</SelectItem>
                         <SelectItem value="literary">วรรณกรรม</SelectItem>
+                        <SelectItem value="business">ธุรกิจ</SelectItem>
+                        <SelectItem value="self-help">พัฒนาตนเอง</SelectItem>
+                        <SelectItem value="psychology">จิตวิทยา</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
+
                   <div className="flex flex-col space-y-3">
                     <Label>ประเภทหนังสือ</Label>
                     <div className="flex flex-col space-y-2">
@@ -105,7 +117,8 @@ export default function Products() {
                           onChange={() =>
                             setFilters({
                               ...filters,
-                              types: filters.types === "physical" ? "" : "physical",
+                              types:
+                                filters.types === "physical" ? "" : "physical",
                             })
                           }
                         />
@@ -161,12 +174,12 @@ export default function Products() {
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {books.length === 0 ? (
+              {paginatedBooks.length === 0 ? (
                 <div className="col-span-full text-center py-8 text-gray-500">
                   ไม่พบหนังสือที่ค้นหา
                 </div>
               ) : (
-                books.map((book, index) => (
+                paginatedBooks.map((book, index) => (
                   <Link
                     href={`/products/information/${book.bookId}`}
                     key={index}
@@ -213,6 +226,26 @@ export default function Products() {
               )}
             </div>
           )}
+
+          <div className="flex items-center justify-between mt-6 text-center">
+            <Button
+              onClick={goToPrevPage}
+              disabled={currentPage === 1}
+              className="bg-gray-600"
+            >
+              <ChevronLeft />
+            </Button>
+            <span className="flex-grow">
+              หน้า {currentPage} จาก {totalPages}
+            </span>
+            <Button
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages}
+              className="bg-gray-500"
+            >
+              <ChevronRight />
+            </Button>
+          </div>
         </div>
       </div>
     </div>
