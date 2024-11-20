@@ -54,6 +54,7 @@ export const useHome = () => {
   }, []);
   
   return {
+    loading,
     books,
     categories,
     title,

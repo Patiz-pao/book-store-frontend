@@ -13,6 +13,7 @@ import {
 
 export default function Home() {
   const {
+    loading,
     books,
     categories,
     title,
@@ -20,6 +21,14 @@ export default function Home() {
     handleSearchTitle,
     handleSearchCategory,
   } = useHome();
+
+  if (loading) {
+    return (
+      <div className="container mx-auto py-8 px-4 flex items-center justify-center min-h-[500px]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
