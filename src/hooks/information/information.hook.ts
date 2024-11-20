@@ -7,6 +7,10 @@ export const useInformation = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
+  const [isHeartFilled, setIsHeartFilled] = useState(false);
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+
   const params = useParams();
   const bookId = params.id;
 
@@ -19,7 +23,7 @@ export const useInformation = () => {
 
       if (response.ok) {
         const data = await response.json();
-        
+
         setBook(data.data);
       } else {
         setError("Failed to fetch book");
@@ -31,11 +35,56 @@ export const useInformation = () => {
     }
   };
 
+  const formatThaiDate = (dateString: string) => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) {
+      return "-";
+    }
+
+    return date.toLocaleDateString("th-TH", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
+  const handleAddToCart = () => {
+    setAlertMessage("เพิ่มลงตะกร้า สำเร็จ! (Mockup)");
+    setAlertOpen(true);
+    setTimeout(() => {
+      setAlertOpen(false);
+    }, 3000);
+  };
+
+  const handleShare = () => {
+    setAlertMessage("แชร์สำเร็จ! (Mockup)");
+    setAlertOpen(true);
+    setTimeout(() => {
+      setAlertOpen(false);
+    }, 3000);
+  };
+
+  const toggleHeart = () => {
+    setIsHeartFilled(!isHeartFilled);
+  };
+
   useEffect(() => {
     if (bookId) {
       getBookById();
     }
   }, [bookId]);
 
-  return { book, loading, error };
+  return {
+    book,
+    loading,
+    error,
+    formatThaiDate,
+    handleAddToCart,
+    toggleHeart,
+    isHeartFilled,
+    handleShare,
+    alertOpen,
+    setAlertOpen,
+    alertMessage
+  };
 };

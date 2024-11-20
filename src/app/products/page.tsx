@@ -97,7 +97,7 @@ export default function Products() {
                     <div className="flex flex-col space-y-2">
                       <div className="flex items-center space-x-2">
                         <input
-                          type="radio"
+                          type="checkbox"
                           id="physical"
                           name="bookType"
                           value="physical"
@@ -105,7 +105,7 @@ export default function Products() {
                           onChange={() =>
                             setFilters({
                               ...filters,
-                              types: "physical",
+                              types: filters.types === "physical" ? "" : "physical",
                             })
                           }
                         />
@@ -116,7 +116,7 @@ export default function Products() {
 
                       <div className="flex items-center space-x-2">
                         <input
-                          type="radio"
+                          type="checkbox"
                           id="ebook"
                           name="bookType"
                           value="ebook"
@@ -124,7 +124,7 @@ export default function Products() {
                           onChange={() =>
                             setFilters({
                               ...filters,
-                              types: "ebook",
+                              types: filters.types === "ebook" ? "" : "ebook",
                             })
                           }
                         />
@@ -169,7 +169,6 @@ export default function Products() {
                 books.map((book, index) => (
                   <Link
                     href={`/products/information/${book.bookId}`}
-                    // href={`/products/information`}
                     key={index}
                     className="block transition-transform hover:scale-105"
                   >

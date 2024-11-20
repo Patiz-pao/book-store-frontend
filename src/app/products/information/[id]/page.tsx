@@ -1,14 +1,38 @@
-"use client"
-import React from "react";
+"use client";
+import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ShoppingCart, Heart, Share2 } from "lucide-react";
 import { useInformation } from "@/hooks/information/information.hook";
+import Alert from "@mui/material/Alert";
+
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+
+import "@/app/globals.css";
 
 export default function Information() {
-  const { book, loading, error } = useInformation();
+  const {
+    book,
+    loading,
+    error,
+    formatThaiDate,
+    handleAddToCart,
+    toggleHeart,
+    isHeartFilled,
+    handleShare,
+    alertOpen,
+    setAlertOpen,
+    alertMessage,
+  } = useInformation();
 
   if (loading) {
     return (
@@ -34,36 +58,38 @@ export default function Information() {
     );
   }
 
-  const formatThaiDate = (dateString: string) => {
-    const date = new Date(dateString);
-    if (isNaN(date.getTime())) {
-      return '-';
-    }
-  
-    return date.toLocaleDateString("th-TH", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
   return (
-    <div className="container mx-auto py-8 px-4">
+    <div className="container mx-auto px-4">
+      <Breadcrumb className="py-4">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">หน้าแรก</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/products">สินค้า</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{book.title}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       <div className="grid md:grid-cols-2 gap-8">
         {/* Left Column - Image */}
         <div className="space-y-4">
           <Card className="overflow-hidden">
-            <div className="aspect-[3/4] bg-gray-100 relative">
+            <div className="aspect-[4/4] bg-gray-100 relative">
               <img
-                src={book.imageUrl || "/api/placeholder/600/800"}
+                src={book.imageUrl}
                 alt={book.title}
-                className="w-full h-full object-cover"
+                className="w-auto max-h-auto object-cover mx-auto"
               />
             </div>
           </Card>
         </div>
 
-        {/* Right Column - Information */}
         <div className="space-y-6">
           <div>
             <Badge className="mb-2 text-white bg-green-500 hover:bg-green-600">
@@ -77,22 +103,32 @@ export default function Information() {
             </div>
 
             <div className="flex space-x-4 mb-6">
-              <Button className="flex-1">
+              <Button className="flex-1" onClick={handleAddToCart}>
                 <ShoppingCart className="w-4 h-4 mr-2" />
                 เพิ่มลงตะกร้า
               </Button>
-              <Button variant="outline" size="icon">
-                <Heart className="w-4 h-4" />
+              <Button variant="outline" size="icon" onClick={toggleHeart}>
+                <Heart
+                  className={`w-4 h-4 ${isHeartFilled ? "text-red-500" : ""}`}
+                />
               </Button>
-              <Button variant="outline" size="icon">
+              <Button variant="outline" size="icon" onClick={handleShare}>
                 <Share2 className="w-4 h-4" />
               </Button>
             </div>
+            {alertOpen && (
+              <Alert
+                severity="success"
+                onClose={() => setAlertOpen(false)}
+                className="fade-in-out"
+              >
+                {alertMessage}
+              </Alert>
+            )}
           </div>
 
           <Separator />
 
-          {/* Book Details */}
           <div>
             <h2 className="text-xl font-semibold mb-4">คุณสมบัติสินค้า</h2>
             <div className="grid grid-cols-2 gap-4 text-sm">
@@ -110,7 +146,7 @@ export default function Information() {
               </div>
               <div>
                 <p className="text-gray-600">วันที่วางขาย</p>
-                <p>{book.date ? formatThaiDate(book.date) : '-'}</p>
+                <p>{book.date ? formatThaiDate(book.date) : "-"}</p>
               </div>
               <div>
                 <p className="text-gray-600">ขนาด</p>
@@ -125,7 +161,6 @@ export default function Information() {
 
           <Separator />
 
-          {/* Description */}
           <div>
             <h2 className="text-xl font-semibold mb-4">รายละเอียด</h2>
             <p className="text-gray-700 leading-relaxed">

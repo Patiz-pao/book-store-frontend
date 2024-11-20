@@ -72,3 +72,30 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+
+/* alert.css */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.fade-in-out {
+  animation: fadeIn 0.5s ease-in-out, fadeOut 1s ease-in-out 2.5s forwards;
+}
+
