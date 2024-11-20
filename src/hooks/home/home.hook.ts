@@ -1,10 +1,13 @@
+import { Book } from "@/Types/bookstore/book.types";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export const useHome = () => {
   const router = useRouter();
   const [title, setTitle] = useState("");
-  const [category, setCategory] = useState("");
+  const [books, setBooks] = useState<Book[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
 
   const handleSearchTitle = (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,29 +18,27 @@ export const useHome = () => {
     router.push(`/products?category=${encodeURIComponent(category)}`);
   };
 
-  const featuredBooks = [
-    {
-      title: "เจ้าชายน้อย",
-      author: "อ็องตวน เดอ แซงเตกซูว์ปีรี",
-      price: "฿299",
-      image:
-        "https://mp-static.se-ed.com/e-book-audio/b7n1279bwgzwn9ba9jy1/image/fd0zhfr0",
-    },
-    {
-      title: "แฮร์รี่ พอตเตอร์",
-      author: "เจ.เค. โรว์ลิ่ง",
-      price: "฿359",
-      image:
-        "https://mp-static.se-ed.com/e-book-audio/b7n1279bwgzwn9ba9jy1/image/fd0zhfr0",
-    },
-    {
-      title: "เดอะ อัลเคมิสต์",
-      author: "เปาโล โคเอลโญ",
-      price: "฿279",
-      image:
-        "https://mp-static.se-ed.com/e-book-audio/b7n1279bwgzwn9ba9jy1/image/fd0zhfr0",
-    },
-  ];
+  const getBooks = async () => {
+    setLoading(true);
+    setError("");
+    
+    try {
+      const response = await fetch('/api/books');
+      
+      if (response.ok) {
+        
+        const data = await response.json();
+        const shuffledBooks = data.data.sort(() => Math.random() - 0.5);
+        setBooks(shuffledBooks.slice(0, 3));
+      } else {
+        setError("Failed to fetch books");
+      }
+    } catch (error) {
+      setError("An error occurred while fetching books");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const categories = [
     { label: "การศึกษา", value: "education" },
@@ -48,8 +49,12 @@ export const useHome = () => {
     { label: "วรรณกรรม", value: "literary" },
   ];
 
+  useEffect(() => {
+    getBooks();
+  }, []);
+  
   return {
-    featuredBooks,
+    books,
     categories,
     title,
     setTitle,
