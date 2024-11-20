@@ -28,7 +28,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function Products() {
-  const { books, loading, error, searchParams, setSearchParams, handleSearch } = useProducts();
+  const { books, loading, error, filters, setFilters, handleSearch } =
+    useProducts();
 
   return (
     <div className="container mx-auto py-4 px-4">
@@ -59,10 +60,10 @@ export default function Products() {
                     <Input
                       id="name"
                       placeholder="ชื่อหนังสือ"
-                      value={searchParams.title}
+                      value={filters.title}
                       onChange={(e) =>
-                        setSearchParams({
-                          ...searchParams,
+                        setFilters({
+                          ...filters,
                           title: e.target.value,
                         })
                       }
@@ -72,8 +73,8 @@ export default function Products() {
                     <Label htmlFor="category">หมวดหมู่สินค้า</Label>
                     <Select
                       onValueChange={(value) =>
-                        setSearchParams({
-                          ...searchParams,
+                        setFilters({
+                          ...filters,
                           category: value,
                         })
                       }
@@ -101,10 +102,10 @@ export default function Products() {
                           id="physical"
                           name="bookType"
                           value="physical"
-                          checked={searchParams.types === "physical"}
+                          checked={filters.types === "physical"}
                           onChange={() =>
-                            setSearchParams({
-                              ...searchParams,
+                            setFilters({
+                              ...filters,
                               types: "physical",
                             })
                           }
@@ -120,10 +121,10 @@ export default function Products() {
                           id="ebook"
                           name="bookType"
                           value="ebook"
-                          checked={searchParams.types === "ebook"}
+                          checked={filters.types === "ebook"}
                           onChange={() =>
-                            setSearchParams({
-                              ...searchParams,
+                            setFilters({
+                              ...filters,
                               types: "ebook",
                             })
                           }
@@ -170,13 +171,20 @@ export default function Products() {
                 books.map((book, index) => (
                   <Card key={index}>
                     <CardHeader>
-                      <CardTitle className="text-lg mx-auto">{book.title}</CardTitle>
+                      <CardTitle className="text-lg mx-auto">
+                        {book.title}
+                      </CardTitle>
                       <CardContent className="p-0">
-                        <img src={book.imageUrl} className="w-[50%] mx-auto" />
+                        <img
+                          src={book.imageUrl}
+                          className="w-auto max-h-[250px] mx-auto object-contain"
+                        />
                       </CardContent>
-                      <CardDescription className="py-2">
-                        {book.description}
-                      </CardDescription>
+                      <div className="h-[108px] overflow-hidden">
+                        <CardDescription className="py-2 text-ellipsis">
+                          {book.description}
+                        </CardDescription>
+                      </div>
                     </CardHeader>
                     <CardContent>
                       <div className="flex gap-2 items-center">
@@ -191,13 +199,13 @@ export default function Products() {
                         <CardDescription className="text-sm text-black">
                           หมวดหมู่:
                         </CardDescription>
-                        <CardDescription>
-                          {book.category}
-                        </CardDescription>
+                        <CardDescription>{book.category}</CardDescription>
                       </div>
-                    <Button className="bg-green-600 mt-2">
-                      <Link href="/">ดูเพิ่มเติม</Link>
-                    </Button>
+                      <div className="flex justify-between">
+                        <Button className="bg-green-600 mt-2">
+                          <Link href="/">ดูเพิ่มเติม</Link>
+                        </Button>
+                      </div>
                     </CardContent>
                   </Card>
                 ))

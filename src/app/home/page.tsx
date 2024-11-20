@@ -1,33 +1,38 @@
-import React from 'react';
-import { BookOpen, Search, ShoppingCart, TrendingUp } from 'lucide-react';
+"use client"
+import React, { useState } from "react";
+import { BookOpen, Search, ShoppingCart, TrendingUp } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useHome } from "@/hooks/home/home.hook"
 
 export default function Home() {
-  const featuredBooks = [
-    { title: "เจ้าชายน้อย", author: "อ็องตวน เดอ แซงเตกซูว์ปีรี", price: "฿299", image: "https://mp-static.se-ed.com/e-book-audio/b7n1279bwgzwn9ba9jy1/image/fd0zhfr0" },
-    { title: "แฮร์รี่ พอตเตอร์", author: "เจ.เค. โรว์ลิ่ง", price: "฿359", image: "https://mp-static.se-ed.com/e-book-audio/b7n1279bwgzwn9ba9jy1/image/fd0zhfr0"},
-    { title: "เดอะ อัลเคมิสต์", author: "เปาโล โคเอลโญ", price: "฿279", image: "https://mp-static.se-ed.com/e-book-audio/b7n1279bwgzwn9ba9jy1/image/fd0zhfr0"},
-  ];
-
-  const categories = [
-    "นวนิยาย", "การพัฒนาตนเอง", "ธุรกิจ", "วรรณกรรม", "การ์ตูน", "นิทาน"
-  ];
+  const { featuredBooks, categories, title, setTitle, handleSearch } = useHome();
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
       <div className="bg-slate-300 text-black py-20 px-4">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">ยินดีต้อนรับสู่ร้านหนังสือออนไลน์</h1>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+            ยินดีต้อนรับสู่ร้านหนังสือออนไลน์
+          </h1>
           <p className="text-xl mb-8">ค้นพบหนังสือดีๆ ที่ใช่สำหรับคุณ</p>
+          {/* This call api */}
           <div className="flex max-w-xl mx-auto bg-white rounded-lg overflow-hidden">
-            <input 
-              type="text"
-              placeholder="ค้นหาหนังสือที่คุณสนใจ..."
-              className="flex-1 px-6 py-3 text-gray-700 focus:outline-none"
-            />
-            <button className="bg-slate-500 text-white px-6 py-3 flex items-center">
-              <Search className="w-5 h-5" />
-            </button>
+            <form onSubmit={handleSearch} className="flex w-full">
+              <input
+                type="text"
+                placeholder="ค้นหาหนังสือที่คุณสนใจ..."
+                className="flex-1 px-6 py-3 text-gray-700 focus:outline-none"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+              />
+              <button
+                type="submit"
+                className="bg-slate-500 text-white px-6 py-3 flex items-center"
+              >
+                <Search className="w-5 h-5" />
+              </button>
+            </form>
           </div>
         </div>
       </div>
@@ -52,8 +57,15 @@ export default function Home() {
         <h2 className="text-2xl font-bold mb-6">หนังสือแนะนำ</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {featuredBooks.map((book) => (
-            <div key={book.title} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-200">
-              <img src={book.image} alt={book.title} className="object-cover mx-auto w-[50%]" />
+            <div
+              key={book.title}
+              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-200"
+            >
+              <img
+                src={book.image}
+                alt={book.title}
+                className="object-cover mx-auto w-[50%]"
+              />
               <div className="p-4">
                 <h3 className="font-bold text-lg mb-2">{book.title}</h3>
                 <p className="text-gray-600 mb-2">{book.author}</p>
@@ -76,7 +88,9 @@ export default function Home() {
             <div className="bg-white p-6 rounded-lg text-center">
               <BookOpen className="w-12 h-12 mx-auto mb-4 text-black-600" />
               <h3 className="font-bold text-lg mb-2">หนังสือหลากหลาย</h3>
-              <p className="text-gray-600">รวบรวมหนังสือคุณภาพกว่า 10,000 เล่ม</p>
+              <p className="text-gray-600">
+                รวบรวมหนังสือคุณภาพกว่า 10,000 เล่ม
+              </p>
             </div>
             <div className="bg-white p-6 rounded-lg text-center">
               <TrendingUp className="w-12 h-12 mx-auto mb-4 text-black-600" />

@@ -2,14 +2,16 @@
 import { SearchParams } from "@/Types/products/products.types"
 import { useState, useEffect } from "react";
 import { Book } from "@/Types/bookstore/book.types";
+import { useSearchParams } from "next/navigation";
 
 export const useProducts = () => {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
-  const [searchParams, setSearchParams] = useState<SearchParams>({
-    title: "",
+  const searchParams = useSearchParams();
+  const [filters, setFilters] = useState<SearchParams>({
+    title: searchParams.get("title") || "",
     description: "",
     price: undefined,
     category: "",
@@ -18,8 +20,19 @@ export const useProducts = () => {
   });
 
   useEffect(() => {
-    getBooks();
-  }, []);
+    if (searchParams.get("title")) {
+      setFilters((prev) => ({
+        ...prev,
+        title: searchParams.get("title") || prev.title,
+      }));
+      searchBooks({
+        ...filters,
+        title: searchParams.get("title") || filters.title,
+      });
+    } else {
+      getBooks();
+    }
+  }, [searchParams]);
 
   const getBooks = async () => {
     setLoading(true);
@@ -43,7 +56,7 @@ export const useProducts = () => {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    searchBooks(searchParams);
+    searchBooks(filters);
   };
 
   const searchBooks = async (params: SearchParams) => {
@@ -89,8 +102,8 @@ export const useProducts = () => {
     loading,
     error,
     getBooks,
-    searchParams,
-    setSearchParams,
+    filters,
+    setFilters,
     handleSearch,
   };
 };
