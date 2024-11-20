@@ -83,6 +83,7 @@ export default function Products() {
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="category">หมวดหมู่สินค้า</Label>
                     <Select
+                      value={filters.category}
                       onValueChange={(value) =>
                         setFilters({
                           ...filters,

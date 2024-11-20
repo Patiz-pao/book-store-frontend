@@ -1,4 +1,3 @@
-
 import { SearchParams } from "@/Types/products/products.types"
 import { useState, useEffect } from "react";
 import { Book } from "@/Types/bookstore/book.types";
@@ -12,11 +11,12 @@ export const useProducts = () => {
   const itemsPerPage = 15;
 
   const searchParams = useSearchParams();
+  
   const [filters, setFilters] = useState<SearchParams>({
     title: searchParams.get("title") || "",
     description: "",
     price: undefined,
-    category: "",
+    category: searchParams.get("category") || "",
     types: "",
     imageUrl: "",
   });
@@ -33,14 +33,20 @@ export const useProducts = () => {
   const goToPrevPage = () => setCurrentPage((prev) => Math.max(prev - 1, 1));
 
   useEffect(() => {
-    if (searchParams.get("title")) {
+    const titleParam = searchParams.get("title");
+    const categoryParam = searchParams.get("category");
+
+    if (titleParam || categoryParam) {
       setFilters((prev) => ({
         ...prev,
-        title: searchParams.get("title") || prev.title,
+        title: titleParam || prev.title,
+        category: categoryParam || prev.category,
       }));
+      
       searchBooks({
         ...filters,
-        title: searchParams.get("title") || filters.title,
+        title: titleParam || filters.title,
+        category: categoryParam || filters.category,
       });
     } else {
       getBooks();
@@ -108,7 +114,6 @@ export const useProducts = () => {
       setLoading(false);
     }
   };
-  
 
   return {
     books,

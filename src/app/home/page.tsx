@@ -1,10 +1,25 @@
-"use client"
+"use client";
 import React from "react";
 import { BookOpen, Search, ShoppingCart, TrendingUp } from "lucide-react";
-import { useHome } from "@/hooks/home/home.hook"
+import { useHome } from "@/hooks/home/home.hook";
+import Link from "next/link";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function Home() {
-  const { featuredBooks, categories, title, setTitle, handleSearchTitle } = useHome();
+  const {
+    books,
+    categories,
+    title,
+    setTitle,
+    handleSearchTitle,
+    handleSearchCategory,
+  } = useHome();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -37,40 +52,62 @@ export default function Home() {
       <div className="max-w-6xl mx-auto py-12 px-4">
         <h2 className="text-2xl font-bold mb-6">หมวดหมู่ยอดนิยม</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {categories.map((category) => (
+          {categories.map(({ label, value }) => (
             <button
-              key={category}
+              key={value}
               className="bg-white p-4 rounded-lg shadow hover:shadow-md transition duration-200 text-center"
+              onClick={() => handleSearchCategory(value)}
             >
-              {category}
+              {label}
             </button>
           ))}
         </div>
       </div>
+
       <div className="max-w-6xl mx-auto py-12 px-4">
         <h2 className="text-2xl font-bold mb-6">หนังสือแนะนำ</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {featuredBooks.map((book) => (
-            <div
-              key={book.title}
-              className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition duration-200"
+          {books.map((book, index) => (
+            <Link
+              href={`/products/information/${book.bookId}`}
+              key={index}
+              className="block transition-transform hover:scale-105"
             >
-              <img
-                src={book.image}
-                alt={book.title}
-                className="object-cover mx-auto w-[50%]"
-              />
-              <div className="p-4">
-                <h3 className="font-bold text-lg mb-2">{book.title}</h3>
-                <p className="text-gray-600 mb-2">{book.author}</p>
-                <div className="flex justify-between items-center">
-                  <span className="text-green-700 font-bold">{book.price}</span>
-                  <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition duration-200">
-                    เพิ่มลงตะกร้า
-                  </button>
-                </div>
-              </div>
-            </div>
+              <Card className="h-full cursor-pointer hover:shadow-lg">
+                <CardHeader>
+                  <CardTitle className="text-lg mx-auto">
+                    {book.title}
+                  </CardTitle>
+                  <CardContent className="p-0">
+                    <img
+                      src={book.imageUrl}
+                      className="w-auto max-h-[200px] mx-auto object-contain"
+                    />
+                  </CardContent>
+                  <div className="h-[67px] overflow-hidden">
+                    <CardDescription className="py-2 text-ellipsis">
+                      {book.description}
+                    </CardDescription>
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="flex gap-2 items-center">
+                    <CardDescription className="text-sm text-black">
+                      ประเภทหนังสือ:
+                    </CardDescription>
+                    <CardDescription>
+                      {book.types === "physical" ? "หนังสือเล่ม" : "E-book"}
+                    </CardDescription>
+                  </div>
+                  <div className="flex gap-2 items-center">
+                    <CardDescription className="text-sm text-black">
+                      หมวดหมู่:
+                    </CardDescription>
+                    <CardDescription>{book.category}</CardDescription>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
           ))}
         </div>
       </div>
