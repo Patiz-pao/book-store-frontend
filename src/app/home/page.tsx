@@ -1,10 +1,17 @@
-"use client"
+"use client";
 import React from "react";
 import { BookOpen, Search, ShoppingCart, TrendingUp } from "lucide-react";
-import { useHome } from "@/hooks/home/home.hook"
+import { useHome } from "@/hooks/home/home.hook";
 
 export default function Home() {
-  const { featuredBooks, categories, title, setTitle, handleSearchTitle } = useHome();
+  const {
+    featuredBooks,
+    categories,
+    title,
+    setTitle,
+    handleSearchTitle,
+    handleSearchCategory,
+  } = useHome();
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -37,16 +44,18 @@ export default function Home() {
       <div className="max-w-6xl mx-auto py-12 px-4">
         <h2 className="text-2xl font-bold mb-6">หมวดหมู่ยอดนิยม</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {categories.map((category) => (
+          {categories.map(({ label, value }) => (
             <button
-              key={category}
+              key={value}
               className="bg-white p-4 rounded-lg shadow hover:shadow-md transition duration-200 text-center"
+              onClick={() => handleSearchCategory(value)}
             >
-              {category}
+              {label}
             </button>
           ))}
         </div>
       </div>
+
       <div className="max-w-6xl mx-auto py-12 px-4">
         <h2 className="text-2xl font-bold mb-6">หนังสือแนะนำ</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
