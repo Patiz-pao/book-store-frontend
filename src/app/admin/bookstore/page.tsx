@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { useBookstore } from "@/hooks/bookstore/bookstore.hook";
-import { Pencil, Trash2, Plus, Search, RefreshCw, Book, FileText } from "lucide-react";
+import { Pencil, Trash2, Plus, Search, RefreshCw, Book, FileText, Library } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -48,7 +48,7 @@ export default function AdminBooksManagement() {
   return (
     <div className="container mx-auto p-4 space-y-4">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Books Management</h1>
+      <div></div>
         <Button
           onClick={handleAddNew}
           className="bg-green-600 hover:bg-green-700"
@@ -80,7 +80,7 @@ export default function AdminBooksManagement() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>ID</TableHead>
+                  <TableHead>Book ID</TableHead>
                   <TableHead>Title</TableHead>
                   <TableHead>Description</TableHead>
                   <TableHead>Category</TableHead>
