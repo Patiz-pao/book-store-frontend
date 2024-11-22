@@ -17,14 +17,14 @@ export default function Home() {
     const interval = setInterval(async () => {
       try {
         const response = await axios.get("/api/ping");
-        console.log("Ping success [10 minutes]:", response.data);
+        console.log("Ping success [45 seconds]:", response.data);
       } catch (error) {
         console.error("Ping failed:", error);
       }
-    }, 600000);
-
+    }, 45000);
+  
     return () => clearInterval(interval);
-  }, []);
+  }, []);  
 
   const {
     loading,
