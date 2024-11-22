@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { BookOpen, Search, ShoppingCart, TrendingUp } from "lucide-react";
 import { useHome } from "@/hooks/home/home.hook";
 import Link from "next/link";
@@ -10,8 +10,22 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import axios from "axios";
 
 export default function Home() {
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const response = await axios.get("/api/ping");
+        console.log("Ping success [10 minutes]:", response.data);
+      } catch (error) {
+        console.error("Ping failed:", error);
+      }
+    }, 600000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const {
     loading,
     books,
