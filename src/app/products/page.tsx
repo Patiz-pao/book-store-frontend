@@ -27,8 +27,23 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Suspense } from "react";
 
 export default function Products() {
+  return (
+    <Suspense 
+      fallback={
+        <div className="flex items-center justify-center h-screen">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+        </div>
+      }
+    >
+      <ProductsContent />
+    </Suspense>
+  );
+}
+
+function ProductsContent() {
   const {
     loading,
     error,
