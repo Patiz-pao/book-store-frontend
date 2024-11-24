@@ -14,7 +14,6 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    console.log("Received Data:", body);
 
     const response = await axiosInstance.post("/books", body, {
       headers: {
@@ -28,3 +27,26 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Failed to save book" }, { status: 500 });
   }
 }
+
+export async function PUT(req: Request) {
+  try {
+    const body = await req.json();
+    const { bookId } = body;
+
+    if (!bookId) {
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    }
+
+    const response = await axiosInstance.put(`/books?bookId=${bookId}`, body, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return NextResponse.json(response.data);
+  } catch (error: any) {
+    console.error("Error update book:", error.message || error);
+    return NextResponse.json({ error: "Failed to update book" }, { status: 500 });
+  }
+}
+
