@@ -17,7 +17,6 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Table,
   TableBody,
@@ -44,6 +43,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Alert } from "@mui/material";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 export default function AdminBooksManagement() {
   const {
@@ -54,11 +57,20 @@ export default function AdminBooksManagement() {
     isFileInput,
     require,
     CalendarDate,
+    isEditing,
+    dialogOpen,
+    alertMessage,
+    alertOpen,
+    setAlertOpen,
+    updateBook,
+    setDialogOpen,
     setCalendarDate,
     setIsFileInput,
     handleInputChange,
     handleSelectChange,
+    handleEdit,
     saveBook,
+    resetForm,
   } = useBookstore();
   const [searchTerm, setSearchTerm] = React.useState("");
 
@@ -67,10 +79,6 @@ export default function AdminBooksManagement() {
       book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       book.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  const handleEdit = (bookId: string) => {
-    console.log("Edit book:", bookId);
-  };
 
   const handleDelete = (bookId: string) => {
     console.log("Delete book:", bookId);
@@ -88,23 +96,28 @@ export default function AdminBooksManagement() {
   return (
     <div className="container mx-auto p-4 space-y-4">
       <div className="flex justify-between items-center">
-        <div></div>
-        <Dialog>
+        <div className="hidden sm:block"></div>
+        <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-green-600 hover:bg-green-700">
+            <Button
+              className="bg-green-600 hover:bg-green-700"
+              onClick={() => resetForm()}
+            >
               <Plus className="w-4 h-4 mr-2" />
               เพิ่มหนังสือใหม่
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-[500px]">
             <DialogHeader>
-              <DialogTitle>เพิ่มหนังสือใหม่</DialogTitle>
+              <DialogTitle>
+                {isEditing ? "แก้ไขหนังสือ" : "เพิ่มหนังสือใหม่"}
+              </DialogTitle>
               <DialogDescription>
                 ปรับเปลี่ยนข้อมูลของคุณได้ที่นี่ กดบันทึกเมื่อแก้ไขเสร็จแล้ว
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={saveBook}>
+            <form onSubmit={isEditing ? updateBook : saveBook}>
               <Tabs defaultValue="basic" className="w-full">
                 <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="basic">ข้อมูลพื้นฐาน</TabsTrigger>
@@ -296,12 +309,15 @@ export default function AdminBooksManagement() {
                 <TabsContent value="date" className="mt-4">
                   <div className="grid gap-4">
                     <div className="mx-auto">
-                      <Calendar
-                        mode="single"
-                        selected={CalendarDate}
-                        onSelect={setCalendarDate}
-                        className="rounded-md border shadow w-fit"
-                      />
+                      <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DateCalendar
+                          value={CalendarDate}
+                          onChange={(Date) => {
+                            setCalendarDate(Date);
+                          }}
+                          className="rounded-md border shadow w-fit bg-gray-100 opacity-90"
+                        />
+                      </LocalizationProvider>
                     </div>
                   </div>
                 </TabsContent>
@@ -309,7 +325,7 @@ export default function AdminBooksManagement() {
 
               <DialogFooter className="mt-4">
                 <Button className="bg-gray-600 hover:bg-gray-700" type="submit">
-                  เพิ่มหนังสือ
+                  {isEditing ? "บันทึกการแก้ไข" : "เพิ่มหนังสือ"}
                 </Button>
               </DialogFooter>
             </form>
@@ -318,6 +334,15 @@ export default function AdminBooksManagement() {
       </div>
 
       <Card>
+        {alertOpen && (
+          <Alert
+            severity="success"
+            onClose={() => setAlertOpen(false)}
+            className="fade-in-out mt-2 rounded-full border p-4 shadow-lg"
+          >
+            {alertMessage}
+          </Alert>
+        )}
         <CardContent className="p-6">
           <div className="flex justify-between items-center mb-4 gap-4">
             <div className="flex-1 relative">
