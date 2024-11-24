@@ -14,7 +14,6 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    console.log("Received Data:", body);
 
     const response = await axiosInstance.post("/books", body, {
       headers: {
@@ -32,7 +31,6 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    console.log("Received Data:", body);
     const { bookId } = body;
 
     if (!bookId) {

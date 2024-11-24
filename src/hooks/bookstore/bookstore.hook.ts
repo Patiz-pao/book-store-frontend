@@ -23,7 +23,6 @@ export const useBookstore = () => {
   const saveCalendarDate = (): string | undefined => {
     if (CalendarDate instanceof Date && !isNaN(CalendarDate.getTime())) {
       const formattedDate = format(CalendarDate, "yyyy-MM-dd");
-      console.log("Formatted Date: ", formattedDate);
       return formattedDate;
     }
     return undefined;
@@ -158,7 +157,6 @@ export const useBookstore = () => {
         setDialogOpen(false);
         resetForm();
         handleAlertSave();
-        console.log("Book saved successfully");
       } else {
         setError("Failed to add book");
       }
@@ -172,7 +170,6 @@ export const useBookstore = () => {
 
   const updateBook = async (e: FormEvent<Element>) => {
     e.preventDefault();
-    console.log(formData.date);
 
     const Errors = {
       price: formData.price ? "" : "กรุณากรอกราคา",
@@ -198,7 +195,6 @@ export const useBookstore = () => {
         setDialogOpen(false);
         resetForm();
         handleAlertUpdate();
-        console.log("Book saved successfully");
       } else {
         setError("Failed to add book");
       }
