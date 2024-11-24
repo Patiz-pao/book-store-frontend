@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Table,
   TableBody,
@@ -51,10 +52,13 @@ export default function AdminBooksManagement() {
     error,
     formData,
     isFileInput,
+    require,
+    CalendarDate,
+    setCalendarDate,
     setIsFileInput,
     handleInputChange,
     handleSelectChange,
-    handleSubmit,
+    saveBook,
   } = useBookstore();
   const [searchTerm, setSearchTerm] = React.useState("");
 
@@ -100,11 +104,12 @@ export default function AdminBooksManagement() {
               </DialogDescription>
             </DialogHeader>
 
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={saveBook}>
               <Tabs defaultValue="basic" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
+                <TabsList className="grid w-full grid-cols-3">
                   <TabsTrigger value="basic">ข้อมูลพื้นฐาน</TabsTrigger>
                   <TabsTrigger value="details">รายละเอียดเพิ่มเติม</TabsTrigger>
+                  <TabsTrigger value="date">รายละเอียดวันวางขาย</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="basic" className="mt-4">
@@ -138,6 +143,9 @@ export default function AdminBooksManagement() {
                         value={formData.price}
                         onChange={handleInputChange}
                       />
+                      {require.price && (
+                        <p className="text-red-500 text-sm">{require.price}</p>
+                      )}
                     </div>
 
                     <div>
@@ -149,6 +157,9 @@ export default function AdminBooksManagement() {
                         value={formData.stock}
                         onChange={handleInputChange}
                       />
+                      {require.stock && (
+                        <p className="text-red-500 text-sm">{require.stock}</p>
+                      )}
                     </div>
 
                     <div>
@@ -176,15 +187,20 @@ export default function AdminBooksManagement() {
                           </SelectGroup>
                         </SelectContent>
                       </Select>
+                      {require.category && (
+                        <p className="text-red-500 text-sm">
+                          {require.category}
+                        </p>
+                      )}
                     </div>
 
                     <div>
                       <Label htmlFor="type">ประเภท</Label>
                       <Select
                         onValueChange={(value) =>
-                          handleSelectChange(value, "type")
+                          handleSelectChange(value, "types")
                         }
-                        value={formData.type}
+                        value={formData.types}
                       >
                         <SelectTrigger>
                           <SelectValue placeholder="เลือกประเภทหนังสือ" />
@@ -199,6 +215,9 @@ export default function AdminBooksManagement() {
                           </SelectGroup>
                         </SelectContent>
                       </Select>
+                      {require.types && (
+                        <p className="text-red-500 text-sm">{require.types}</p>
+                      )}
                     </div>
                   </div>
                 </TabsContent>
@@ -270,6 +289,18 @@ export default function AdminBooksManagement() {
                         placeholder="กรอกขนาด , E-Book กรอก 'PDF'"
                         value={formData.size}
                         onChange={handleInputChange}
+                      />
+                    </div>
+                  </div>
+                </TabsContent>
+                <TabsContent value="date" className="mt-4">
+                  <div className="grid gap-4">
+                    <div className="mx-auto">
+                      <Calendar
+                        mode="single"
+                        selected={CalendarDate}
+                        onSelect={setCalendarDate}
+                        className="rounded-md border shadow w-fit"
                       />
                     </div>
                   </div>
