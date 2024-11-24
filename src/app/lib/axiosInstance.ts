@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'http://localhost:8080/',
+  baseURL: 'https://book-store-api-4mpr.onrender.com',
   headers: {
     'Content-Type': 'application/json',
   },
