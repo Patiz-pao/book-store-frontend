@@ -26,7 +26,18 @@ export const useBookstore = () => {
       return formattedDate;
     }
     return undefined;
-  };  
+  };
+
+  const [searchTerm, setSearchTerm] = React.useState("");
+  const [selectedBookId, setSelectedBookId] = React.useState<string | null>(
+    null
+  );
+
+  const filteredBooks = books?.filter(
+    (book) =>
+      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      book.description.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const FormData = {
     bookId: "",
@@ -101,6 +112,33 @@ export const useBookstore = () => {
     }
   };
 
+  const deleteBook = async (bookId: string) => {
+    try {
+      setLoading(true);
+
+      const response = await fetch(`/api/books?bookId=${bookId}`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        await getBooks();
+        handleAlertDelete();
+        console.log("del success");
+      } else {
+        const errorData = await response.json();
+        setError(errorData.error || "Failed to delete book");
+      }
+    } catch (error) {
+      setError("An error occurred while deleting the book");
+      console.error("Delete book error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleEdit = (bookId: string) => {
     const bookToEdit = books.find((book) => book.bookId === bookId);
     if (bookToEdit) {
@@ -110,7 +148,7 @@ export const useBookstore = () => {
         stock: bookToEdit.stock.toString(),
         date: bookToEdit.date.toString(),
       });
-  
+
       if (bookToEdit.date) {
         const parsedDate = new Date(bookToEdit.date);
         if (!isNaN(parsedDate.getTime())) {
@@ -122,12 +160,19 @@ export const useBookstore = () => {
       } else {
         setCalendarDate(new Date());
       }
-  
+
       setIsEditing(true);
       setDialogOpen(true);
     }
   };
-  
+
+  const handleDelete = (bookId: string) => {
+    const book = books.find((book) => book.bookId === bookId);
+
+    if (book) {
+      deleteBook(bookId);
+    }
+  };
 
   const saveBook = async (e: FormEvent<Element>) => {
     e.preventDefault();
@@ -222,8 +267,15 @@ export const useBookstore = () => {
     }, 3000);
   };
 
+  const handleAlertDelete = () => {
+    setAlertMessage("Delete Success");
+    setAlertOpen(true);
+    setTimeout(() => {
+      setAlertOpen(false);
+    }, 3000);
+  };
+
   return {
-    books,
     loading,
     error,
     formData,
@@ -234,8 +286,10 @@ export const useBookstore = () => {
     dialogOpen,
     alertOpen,
     alertMessage,
-    handleAlertSave,
-    handleAlertUpdate,
+    searchTerm,
+    selectedBookId,
+    filteredBooks,
+    setSearchTerm,
     updateBook,
     setDialogOpen,
     setCalendarDate,
@@ -243,8 +297,10 @@ export const useBookstore = () => {
     handleInputChange,
     handleSelectChange,
     handleEdit,
+    handleDelete,
     saveBook,
     resetForm,
     setAlertOpen,
+    setSelectedBookId,
   };
 };

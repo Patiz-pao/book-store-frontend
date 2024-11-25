@@ -50,3 +50,31 @@ export async function PUT(req: Request) {
   }
 }
 
+export async function DELETE(req: Request) {
+  try {
+    const { searchParams } = new URL(req.url);
+    const bookId = searchParams.get("bookId");
+
+    if (!bookId) {
+      return NextResponse.json({ error: "ID is required" }, { status: 400 });
+    }
+
+    const response = await axiosInstance.delete(`/books`, {
+      params: { bookId },
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    return NextResponse.json(response.data, { status: response.status });
+  } catch (error: any) {
+    console.error("Error deleting book:", error.message || error);
+
+    const status = error.response?.status || 500;
+    const message = error.response?.data?.message || "Failed to delete book";
+
+    return NextResponse.json({ error: message }, { status });
+  }
+}
+
+
