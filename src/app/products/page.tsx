@@ -31,7 +31,7 @@ import { Suspense } from "react";
 
 export default function Products() {
   return (
-    <Suspense 
+    <Suspense
       fallback={
         <div className="flex items-center justify-center h-screen">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -229,11 +229,16 @@ function ProductsContent() {
                               : "E-book"}
                           </CardDescription>
                         </div>
-                        <div className="flex gap-2 items-center">
-                          <CardDescription className="text-sm text-black">
-                            หมวดหมู่:
+                        <div className="grid grid-cols-2">
+                          <div className="flex gap-2 items-center">
+                            <CardDescription className="text-sm text-black">
+                              หมวดหมู่:
+                            </CardDescription>
+                            <CardDescription>{book.category}</CardDescription>
+                          </div>
+                          <CardDescription className="text-xl font-bold text-green-700 text-right">
+                            {book.price} ฿
                           </CardDescription>
-                          <CardDescription>{book.category}</CardDescription>
                         </div>
                       </CardContent>
                     </Card>

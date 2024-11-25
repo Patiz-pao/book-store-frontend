@@ -1,6 +1,17 @@
 "use client";
 import React from "react";
 import { useBookstore } from "@/hooks/bookstore/bookstore.hook";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Alert } from "@mui/material";
+import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import {
   Pencil,
   Trash2,
@@ -10,13 +21,6 @@ import {
   Book,
   FileText,
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Table,
   TableBody,
@@ -43,14 +47,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Alert } from "@mui/material";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+  AlertDialogTitle,
+  AlertDialogDescription,
+} from "@/components/ui/alert-dialog";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 
 export default function AdminBooksManagement() {
   const {
-    books,
     loading,
     error,
     formData,
@@ -59,9 +77,12 @@ export default function AdminBooksManagement() {
     CalendarDate,
     isEditing,
     dialogOpen,
-    alertMessage,
     alertOpen,
-    setAlertOpen,
+    alertMessage,
+    searchTerm,
+    selectedBookId,
+    filteredBooks,
+    setSearchTerm,
     updateBook,
     setDialogOpen,
     setCalendarDate,
@@ -69,20 +90,12 @@ export default function AdminBooksManagement() {
     handleInputChange,
     handleSelectChange,
     handleEdit,
+    handleDelete,
     saveBook,
     resetForm,
+    setAlertOpen,
+    setSelectedBookId,
   } = useBookstore();
-  const [searchTerm, setSearchTerm] = React.useState("");
-
-  const filteredBooks = books?.filter(
-    (book) =>
-      book.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      book.description.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleDelete = (bookId: string) => {
-    console.log("Delete book:", bookId);
-  };
 
   if (loading)
     return (
@@ -96,6 +109,17 @@ export default function AdminBooksManagement() {
   return (
     <div className="container mx-auto p-4 space-y-4">
       <div className="flex justify-between items-center">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">หน้าแรก</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>จัดการ</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
         <div className="hidden sm:block"></div>
         <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
           <DialogTrigger asChild>
@@ -429,14 +453,57 @@ export default function AdminBooksManagement() {
                       >
                         <Pencil className="w-4 h-4 text-blue-600" />
                       </Button>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleDelete(book.bookId)}
-                        className="hover:bg-red-50"
-                      >
-                        <Trash2 className="w-4 h-4 text-red-600" />
-                      </Button>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="hover:bg-red-50"
+                            onClick={() => setSelectedBookId(book.bookId)}
+                          >
+                            <Trash2 className="w-4 h-4 text-red-600" />
+                          </Button>
+                        </AlertDialogTrigger>
+
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle className="text-lg font-semibold">
+                              ยืนยันการลบหนังสือ
+                            </AlertDialogTitle>
+                            <AlertDialogDescription className="text-sm text-gray-500">
+                              คุณแน่ใจหรือไม่ที่จะลบหนังสือ{" "}
+                              <span className="font-bold text-red-600">
+                                "{book.title}"
+                              </span>{" "}
+                              หากลบไปแล้วจะไม่สามารถนำกลับมาได้อีกครั้ง
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+
+                          <AlertDialogFooter>
+                            <AlertDialogCancel asChild>
+                              <Button variant="outline" size="sm">
+                                ยกเลิก
+                              </Button>
+                            </AlertDialogCancel>
+
+                            <AlertDialogAction asChild>
+                              <Button
+                                className="bg-red-700 hover:bg-red-800"
+                                variant="destructive"
+                                size="sm"
+                                onClick={() => {
+                                  if (selectedBookId) {
+                                    handleDelete(selectedBookId);
+                                    setSelectedBookId(null);
+                                  }
+                                }}
+                              >
+                                ยืนยัน
+                              </Button>
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
                     </TableCell>
                   </TableRow>
                 ))}
