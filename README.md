@@ -1,9 +1,16 @@
 # Book Store Shop Frontend
 
-⚠️ **คำเตือน / Warning**
+⚠️ **คำเตือน / Warning**  
 Free Hosting Auto-Sleep  
 - เนื่องจาก API ถูก deploy ด้วยบริการโฮสติ้งฟรี อาจมีการเข้าสู่โหมดพัก (auto-sleep) หลังจากไม่มีการใช้งานเป็นเวลานาน เมื่อมีการเรียกใช้ API ครั้งแรกหลังจากโหมดพัก อาจต้องรอประมาณ 5-10 นาที เพื่อให้ API กลับมาทำงานอีกครั้ง  
 - The API is deployed using a free hosting service, which may enter an auto-sleep mode after being idle for a while. The first API call after the sleep mode may require a wait time of 5-10 minutes for the API to resume operation.
+
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white)  
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)  
+![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white)  
+![React Hook Form](https://img.shields.io/badge/React%20Hook%20Form-6146E5?style=for-the-badge&logo=reacthookform&logoColor=white)  
+![Axios](https://img.shields.io/badge/Axios-5A29E6?style=for-the-badge&logo=axios&logoColor=white)  
+![Shadcn UI](https://img.shields.io/badge/Shadcn%20UI-F0F0F0?style=for-the-badge&logo=react&logoColor=black)
 
 Book Store Shop Frontend เป็นโปรเจค **Next.js** ที่ใช้ **TypeScript**, **Tailwind CSS**, **React Hook Form**, **Axios**, และ **Shadcn UI** สำหรับพัฒนา UI ที่เชื่อมต่อกับ API ของ Book Store Shop  
 โปรเจคนี้สนับสนุนการทำงานของเว็บไซต์ [Book Store Shop](https://books-store-shop.netlify.app) โดยให้ผู้ใช้สามารถทำการสมัครสมาชิก, ดูสินค้า, และทำการสั่งซื้อออนไลน์ได้อย่างสะดวกและง่ายดาย  
@@ -35,4 +42,4 @@ This frontend project supports the functionality of the [Book Store Shop](https:
 
 ## 🙏 ขอบคุณ (Thank You)
 ขอบคุณที่ใช้โปรเจค Book Store Shop Frontend!  
-Thank you for using Book Store Shop Frontend! 
+Thank you for using Book Store Shop Frontend!
