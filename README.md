@@ -19,6 +19,12 @@
 It supports the [Book Store Shop](https://books-store-shop.netlify.app) site, enabling features like user registration, product viewing, and product editing.  
 
 ## 🛠 ฟีเจอร์หลัก / Key Features  
+**Account Admin For Book Store**
+
+**user:** admin
+
+**pass:** password
+
 - **ดูสินค้า (Product Display):** แสดงรายการสินค้าจาก API  
 - **เพิ่มสินค้า (Product Add):** เพิ่มสินค้าลงฐานข้อมูลผ่าน API  
 - **แก้ไขสินค้า (Product Edit):** อัปเดตข้อมูลสินค้า  
